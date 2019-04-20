@@ -1,0 +1,8 @@
+- name: NHVINST
+  hosts: 
+    - vinst
+    - vinst2
+  become: yes
+  become_method: sudo
+  roles:
+    - mysql
