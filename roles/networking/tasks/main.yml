@@ -1,0 +1,18 @@
+- name: setup mactap network interface
+  template:
+    src: mactap.if.j2
+    dest: /etc/network/interfaces.d/mactap.if
+  # notify: reload netiface
+  register: network_shit
+
+- name: reload netiface
+  become: yes
+  shell: 'ifdown {{ host_facing_interface_name }} && ifup {{ host_facing_interface_name }} && ifdown {{ nethack_server_netiface }} && ifup {{ nethack_server_netiface }}'
+  notify: refresh networking
+  when: network_shit.changed
+
+- name: refresh networking
+  setup:
+    gather_subset:
+      - network
+  when: network_shit.changed

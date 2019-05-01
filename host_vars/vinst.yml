@@ -1,0 +1,4 @@
+ansible_host: 192.168.122.158
+
+nethack_server_netiface: enp2s0
+nethack_server_netaddr: 192.168.1.158

@@ -1,0 +1,5 @@
+nethack_server_netiface: '{{ world_facing_interface_name }}'
+host_facing_interface_name: '{{ ansible_default_ipv4.interface }}'
+world_facing_interface_name: '{{ ansible_interfaces | difference(["lo", host_facing_interface_name]) | first }}'
+# nethack_server_netaddr: '{{ hostvars["inventory_hostname"]["ansible_" nethack_server_netiface] }}'
+nethack_server_netaddr: '{{ hostvars[inventory_hostname]["ansible_" + nethack_server_netiface].ipv4.address }}'

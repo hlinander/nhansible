@@ -1,8 +1,15 @@
 - name: NHVINST
   hosts: 
-    - vinst
-    - vinst2
+    - nethack
   become: yes
   become_method: sudo
+  tasks:
+    - debug:
+        msg: '{{ hostvars[inventory_hostname]["ansible_" + nethack_server_netiface].ipv4.address }}'
+        # msg: '{{ nethack_server_netiface }}'
+        # lololol {{ hostvars[inventory_hostname]["default_interface_name"] }} {{ hostvars[inventory_hostname]["default_interface_name"] }}  {{ hostvars["inventory_hostname"] }} 
+      tags: roffe
   roles:
+    - networking
     - mysql
+    - dnsmasq

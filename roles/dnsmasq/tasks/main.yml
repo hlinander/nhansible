@@ -1,0 +1,18 @@
+- name: Install dnsmasq
+  apt:
+    name: dnsmasq
+
+- name: nethack dnsmasq config
+  template:
+    src: dnsmasq.conf.j2
+    dest: /etc/dnsmasq.conf
+  vars:
+    nethack_server_netaddr: 192.168.1.70
+    nethack_server_netiface: enp1s0
+  notify:
+    - restart dnsmasq
+
+- name: Enable dnsmasq
+  service: 
+    name: dnsmasq
+    enabled: yes
