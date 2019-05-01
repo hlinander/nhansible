@@ -1,0 +1,26 @@
+- name: Clone nethack
+  become_user: nh
+  git:
+    repo: https://nethackerman:kebabvinsten12@github.com/nethackerman/nethack
+    dest: /home/nh/nethack
+    force: yes
+    version: feature/ascension-day-2019
+
+- name: Prepare build
+  become_user: nh
+  shell: "sh sys/unix/setup.sh sys/unix/hints/unix"
+  args:
+    creates: /home/nh/nethack/Makefile
+    chdir: /home/nh/nethack
+
+- name: Build nethack
+  become_user: nh
+  make:
+    chdir: /home/nh/nethack
+    target: all
+
+- name: Create tournament database
+  become: yes
+  shell: mysql < /home/nh/nethack/dhl_create_db.sh && touch /home/nh/created_database
+  args:
+    creates: /home/nh/created_database

@@ -1,0 +1,13 @@
+- name: Clone halloffame
+  become_user: nh
+  git:
+    repo: https://github.com/pellsson/halloffame.git
+    dest: /home/nh/halloffame
+    force: yes
+
+- name: Build halloffame
+  become_user: nh
+  shell: "./local_ghetto_build.sh"
+  args:
+    chdir: /home/nh/halloffame
+    creates: /home/nh/halloffame/halloffame

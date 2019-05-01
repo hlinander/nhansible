@@ -5,14 +5,19 @@
   # notify: reload netiface
   register: network_shit
 
-- name: reload netiface
-  become: yes
-  shell: 'ifdown {{ host_facing_interface_name }} && ifup {{ host_facing_interface_name }} && ifdown {{ nethack_server_netiface }} && ifup {{ nethack_server_netiface }}'
-  notify: refresh networking
-  when: network_shit.changed
-
 - name: refresh networking
   setup:
     gather_subset:
       - network
+  when: network_shit.changed
+
+- name: reload netiface
+  become: yes
+  shell: 'ifdown {{ nethack_server_netiface }} && ifup {{ nethack_server_netiface }}'
+  # notify: refresh networking
+  when: network_shit.changed
+
+- name: fix dmf route
+  become: yes
+  shell: 'ip route del default && ip route add default via {{ host_base_addr }} && echo {{ host_base_addr }} > /tmp/hej'
   when: network_shit.changed

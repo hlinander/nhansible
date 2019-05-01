@@ -1,0 +1,80 @@
+- name: Install dgamelaunch bullshit
+  apt:
+    name: 
+      - sqlite3
+      - libsqlite3-dev
+      - openbsd-inetd
+      - telnetd
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Configure inetd to launch dgamelaunch
+  lineinfile:
+    path: /etc/inetd.conf
+    regex: '^telnet stream tcp nowait root\.root /usr/sbin/tcpd /usr/sbin/in\.telnetd -h -L /home/nh/nethack_server/dgamelaunch$'
+    line: telnet stream tcp nowait root.root /usr/sbin/tcpd /usr/sbin/in.telnetd -h -L /home/nh/nethack_server/dgamelaunch
+
+- name: Clone dgamelaunch
+  become_user: nh
+  git:
+    repo: https://github.com/pellsson/dgamelaunch.git
+    dest: /home/nh/dgamelaunch
+    force: yes
+
+- name: Patch pellsson mysql shit
+  replace:
+    path: /home/nh/dgamelaunch/configure.ac
+    regexp: 'mysqlclient'
+    replace: 'mariadbclient'
+
+- name: Patch pellsson dgl conf shit
+  replace:
+    path: /home/nh/dgamelaunch/examples/dgamelaunch.conf
+    regexp: '\$HOME'
+    replace: '/home/nh'
+
+- name: Config dgamelaunch
+  become_user: nh
+  command:
+  args:
+    chdir: /home/nh/dgamelaunch
+    creates: Makefile
+    argv:
+      - ./autogen.sh 
+      - --enable-debugfile 
+      - --enable-sqlite 
+      - --enable-shmem 
+      - --with-config-file=$HOME/nethack_server/etc/dgamelaunch.conf
+
+- name: Build dgamelaunch
+  become_user: nh
+  make:
+    chdir: /home/nh/dgamelaunch
+    target: all
+
+- name: Install dgamelaunch
+  become: yes
+  shell: ./dgl-create-chroot
+  args:
+    chdir: /home/nh/dgamelaunch
+    creates: /home/nh/nethack_server/dgamelaunch
+  environment:
+    HOME: /home/nh/
+
+- name: Fix perms
+  become: yes
+  file:
+    path: /home/nh/nethack_server/
+    owner: nh
+    recurse: yes
+
+- name: Install nethack
+  become_user: nh
+  make:
+    chdir: /home/nh/nethack
+    target: install
+
+- name: Restart inetd
+  service:
+    name: inetd
+    state: restarted

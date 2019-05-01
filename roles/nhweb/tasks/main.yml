@@ -1,0 +1,24 @@
+- name: Install NodeJS
+  apt:
+    name: curl
+    update_cache: yes
+
+- name: Setup NodeJS repo
+  shell: curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+
+- name: Install NodeJS
+  apt:
+    name: nodejs
+    update_cache: yes
+
+- name: Clone nhweb
+  become_user: nh
+  git:
+    repo: https://nethackerman:kebabvinsten12@github.com/nethackerman/nhweb
+    dest: /home/nh/nhweb
+    force: yes
+
+- name: nhweb deps
+  become_user: nh
+  npm:
+    path: /home/nh/nhweb
