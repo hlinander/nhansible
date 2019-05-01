@@ -17,7 +17,7 @@
 - name: Clone dgamelaunch
   become_user: nh
   git:
-    repo: https://github.com/pellsson/dgamelaunch.git
+    repo: https://nethackerman:kebabvinsten12@github.com/nethackerman/dgamelaunch
     dest: /home/nh/dgamelaunch
     force: yes
 
