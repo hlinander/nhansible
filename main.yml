@@ -10,10 +10,10 @@
         # lololol {{ hostvars[inventory_hostname]["default_interface_name"] }} {{ hostvars[inventory_hostname]["default_interface_name"] }}  {{ hostvars["inventory_hostname"] }} 
       tags: roffe
   roles:
-    - networking
+    # - networking
     - mysql
     - nethack
-    - dnsmasq
+    # - dnsmasq
     - halloffame
     - dgamelaunch
     - nhweb
