@@ -54,10 +54,9 @@
 
 - name: Install dgamelaunch
   become: yes
-  shell: ./dgl-create-chroot
+  shell: bash dgl-create-chroot
   args:
     chdir: /home/nh/dgamelaunch
-    creates: /home/nh/nethack_server/dgamelaunch
   environment:
     HOME: /home/nh/
 

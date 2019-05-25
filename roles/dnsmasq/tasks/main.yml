@@ -11,6 +11,8 @@
     nethack_server_netiface: enp1s0
   notify:
     - restart dnsmasq
+  tags:
+    - dnsmasq
 
 - name: Enable dnsmasq
   service: 
