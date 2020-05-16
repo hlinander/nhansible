@@ -4,7 +4,7 @@
     repo: https://nethackerman:kebabvinsten12@github.com/nethackerman/nethack
     dest: /home/nh/nethack
     force: yes
-    version: feature/ascension-day-2019
+    version: feature/ascension-day-2020
 
 - name: Prepare build
   become_user: nh
