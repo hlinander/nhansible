@@ -1,0 +1,20 @@
+# Setup 2020
+Run ansible twice
+Make sure that nethack is built, check for /home/nh/nethack_server/nh361/sysconf
+Change SHED_UID=id of nh user in /home/nh/nethack_server/etc/dgamelaunch.conf
+Start nhweb manually
+
+# Debugging ttyrec file fails
+Kolla perms nh:nh för nethack_server
+Starta manuell `sudo dgamelaunch`
+strace -p $(pgrep dgame)
+
+# AWS specifics
+    Ubuntu 18.04
+    Halloffame: nått crap med sshfs mountad xlogfile så behöver köras på
+    samma burk som dgamelaunch för att få deathcam.
+
+
+# Todo
+- Kebab och lök spawn rate
+- Team management
